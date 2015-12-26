@@ -2,12 +2,16 @@
 
 var express = require('express');
 var fs = require('fs');
+var mkdirp = require('mkdirp');
 var path = require('path');
 
 var app = express();
 
 var imageDir = 'image';
-fs.mkdirSync(imageDir);
+mkdirp(imageDir, function (err) {
+  // path is already exists
+});
+
 var avatarGenerator = require('avatar-generator')({
   order: 'background face clothes head hair eye mouth'.split(' '),
   images: path.join(__dirname, 'node_modules/avatar-generator/img'),
