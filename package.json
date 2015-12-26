@@ -1,8 +1,21 @@
 {
   "name": "genavatar",
-  "version": "1.0.0",
-  "description": "avatar service like the Gravatar",
+  "version": "0.0.1",
+  "description": "Simple avatar generator service",
   "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jca02266/genavatar.git"
+  },
+  "keywords": [
+    "avatar",
+    "chat"
+  ],
+  "author": {
+    "name": "Koji Arai",
+    "email": "jca02266@gmail.com"
+  },
+  "license": "MIT",
   "dependencies": {
     "avatar-generator": "^1.0.7",
     "express": "^4.13.3",
