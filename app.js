@@ -12,21 +12,26 @@ var avatar = require('avatar-generator')({
   convert: 'convert-image'
 });
 
-avatar('test@example.com', 'male', 200)
+var avatarGenerator = new Promise(function(resolve) {
+  avatar('test@example.com', 'male', 200)
   .write('./test.jpg', function (err) {
     if (err) {
       console.log(err);
     }
   });
+  resolve();
+});
 
 app.get('/:id', function(req, res) {
   res.header("Content-Type", "image/jpeg");
-  fs.readFile('test.jpg', function (err,data) {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    res.send(data);
+  avatarGenerator.then(function() {
+    fs.readFile('test.jpg', function (err,data) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      res.send(data);
+    });
   });
 });
 
