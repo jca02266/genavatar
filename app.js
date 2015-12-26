@@ -18,9 +18,10 @@ var avatarGenerator = require('avatar-generator')({
   convert: 'convert-image'
 });
 
-var avatar = function (id) {
+var avatar = function (id, size, sex) {
+  size = size || 80;
+  sex = sex || 'male';
   return new Promise(function(resolve) {
-    var size = 200;
     var filename = path.join(imageDir, id + '-' + size + '.jpg');
 
     if (fs.existsSync(filename)) {
@@ -28,7 +29,7 @@ var avatar = function (id) {
       return;
     }
 
-    avatarGenerator(id, 'male', size)
+    avatarGenerator(id, sex, size)
     .write(filename, function (err) {
       if (err) {
         console.log(err);
@@ -40,8 +41,12 @@ var avatar = function (id) {
 }
 
 app.get('/:id', function(req, res) {
+  var id = req.params.id;
+  var size = req.query.s || req.query.size;
+  var sex = req.query.x  || req.query.sex;
+
   res.header("Content-Type", "image/jpeg");
-  avatar(req.params.id).then(function(filename) {
+  avatar(id, size, sex).then(function(filename) {
     fs.readFile(filename, function (err,data) {
       if (err) {
         console.log(err);
