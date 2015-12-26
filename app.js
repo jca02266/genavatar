@@ -6,26 +6,33 @@ var path = require('path');
 
 var app = express();
 
+var imageDir = 'image';
+fs.mkdirSync(imageDir);
 var avatarGenerator = require('avatar-generator')({
   order: 'background face clothes head hair eye mouth'.split(' '),
   images: path.join(__dirname, 'node_modules/avatar-generator/img'),
   convert: 'convert-image'
 });
 
-var avatar = new Promise(function(resolve) {
-  avatarGenerator('test@example.com', 'male', 200)
-  .write('./test.jpg', function (err) {
-    if (err) {
-      console.log(err);
-    }
+var avatar = function (id) {
+  return new Promise(function(resolve) {
+    var size = 200;
+    var filename = path.join(imageDir, id + '-' + size + '.jpg');
+    avatarGenerator(id, 'male', size)
+    .write(filename, function (err) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      resolve(filename);
+    });
   });
-  resolve();
-});
+}
 
 app.get('/:id', function(req, res) {
   res.header("Content-Type", "image/jpeg");
-  avatar.then(function() {
-    fs.readFile('test.jpg', function (err,data) {
+  avatar(req.params.id).then(function(filename) {
+    fs.readFile(filename, function (err,data) {
       if (err) {
         console.log(err);
         return;
