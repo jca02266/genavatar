@@ -15,7 +15,7 @@ mkdirp(imageDir, function (err) {
 var avatarGenerator = require('avatar-generator')({
   order: 'background face clothes head hair eye mouth'.split(' '),
   images: path.join(__dirname, 'node_modules/avatar-generator/img'),
-  convert: 'convert-image'
+  convert: 'convert'
 });
 
 var avatar = function (id, size, sex) {
