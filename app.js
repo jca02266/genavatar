@@ -40,7 +40,7 @@ var avatar = function (id, size, sex) {
   });
 }
 
-app.get('/:id', function(req, res) {
+app.get('/avatar/:id', function(req, res) {
   var id = req.params.id;
   var size = req.query.s || req.query.size;
   var sex = req.query.x  || req.query.sex;
