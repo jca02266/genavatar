@@ -4,6 +4,7 @@
   "description": "avatar service like the Gravatar",
   "main": "app.js",
   "dependencies": {
+    "avatar-generator": "^1.0.7",
     "express": "^4.13.3"
   }
 }
