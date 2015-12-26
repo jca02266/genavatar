@@ -23,3 +23,5 @@ curl http://localhost:3000/avatar/someid?s=100 > sample.jpg
 ## License
 
 Licensed under [the MIT license][license].
+
+[license]: https://github.com/jca02266/genavatar/blob/master/LICENSE
