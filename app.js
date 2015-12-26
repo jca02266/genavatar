@@ -6,14 +6,14 @@ var path = require('path');
 
 var app = express();
 
-var avatar = require('avatar-generator')({
+var avatarGenerator = require('avatar-generator')({
   order: 'background face clothes head hair eye mouth'.split(' '),
   images: path.join(__dirname, 'node_modules/avatar-generator/img'),
   convert: 'convert-image'
 });
 
-var avatarGenerator = new Promise(function(resolve) {
-  avatar('test@example.com', 'male', 200)
+var avatar = new Promise(function(resolve) {
+  avatarGenerator('test@example.com', 'male', 200)
   .write('./test.jpg', function (err) {
     if (err) {
       console.log(err);
@@ -24,7 +24,7 @@ var avatarGenerator = new Promise(function(resolve) {
 
 app.get('/:id', function(req, res) {
   res.header("Content-Type", "image/jpeg");
-  avatarGenerator.then(function() {
+  avatar.then(function() {
     fs.readFile('test.jpg', function (err,data) {
       if (err) {
         console.log(err);
