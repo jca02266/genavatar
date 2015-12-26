@@ -18,6 +18,12 @@ var avatar = function (id) {
   return new Promise(function(resolve) {
     var size = 200;
     var filename = path.join(imageDir, id + '-' + size + '.jpg');
+
+    if (fs.existsSync(filename)) {
+      resolve(filename);
+      return;
+    }
+
     avatarGenerator(id, 'male', size)
     .write(filename, function (err) {
       if (err) {
