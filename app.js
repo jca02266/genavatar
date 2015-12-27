@@ -5,6 +5,8 @@ var fs = require('fs');
 var mkdirp = require('mkdirp');
 var path = require('path');
 var bodyParser = require('body-parser');
+var model = require('./model');
+var Post = model.Post;
 
 var app = express();
 
@@ -47,18 +49,23 @@ var avatar = function (id, size, sex) {
 }
 
 app.get('/', function(req, res) {
-  var items = [
-    {"text": "1st Post."},
-    {"text": "2st Post."}
-  ];
-  res.render('index', { title: 'Entry List', items: items });
+  Post.find({}, function(err, items) {
+    res.render('index', { title: 'Entry List', items: items });
+  });
 });
 app.get('/form', function(req, res) {
   res.render('form', { title: 'New Entry' });
 });
 app.post('/create', function(req, res) {
-  console.log(req.body);
-  res.redirect('/');
+  var newPost = new Post(req.body);
+  newPost.save(function(err) {
+    if (err) {
+      console.log(err);
+      res.redirect('back');
+      return;
+    }
+    res.redirect('/');
+  });
 });
 app.get('/avatar/:id', function(req, res) {
   var id = req.params.id;
