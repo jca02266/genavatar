@@ -5,13 +5,16 @@ var fs = require('fs');
 var mkdirp = require('mkdirp');
 var path = require('path');
 var bodyParser = require('body-parser');
+var multer = require('multer');
 var model = require('./model');
+var md5 = require('md5');
 var Post = model.Post;
 
 var app = express();
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.use(multer({ dest: './uploads/'}).single('image'));
 //app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -50,14 +53,34 @@ var avatar = function (id, size, sex) {
 
 app.get('/', function(req, res) {
   Post.find({}, function(err, items) {
-    res.render('index', { title: 'Entry List', items: items });
+    res.render('index', { title: 'Member list', items: items });
   });
 });
 app.get('/form', function(req, res) {
-  res.render('form', { title: 'New Entry' });
+  res.render('form', { title: 'New Member' });
 });
 app.post('/create', function(req, res) {
-  var newPost = new Post(req.body);
+  var email = req.body.email;
+
+  var id = md5(email);
+  if (req.file) {
+    var file = req.file;
+    var srcpath = file.path
+    var dstpath = path.join(imageDir, id + '.jpg');
+    console.log(file);
+    console.log(srcpath);
+    console.log(dstpath);
+
+    fs.rename(srcpath, dstpath, function(err) {
+      if (err) {
+        console.log(err);
+        res.redirect('back');
+        return;
+      }
+    });
+  }
+
+  var newPost = new Post({email: email, id: id, path: dstpath});
   newPost.save(function(err) {
     if (err) {
       console.log(err);
