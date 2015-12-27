@@ -95,6 +95,19 @@ app.get('/avatar/:id', function(req, res) {
   var size = req.query.s || req.query.size;
   var sex = req.query.x  || req.query.sex;
 
+  Post.find({id: id}, function(err, items) {
+    if (items.length == 0) {
+      // no entry
+      var newPost = new Post({id: id});
+      newPost.save(function(err) {
+        if (err) {
+          console.log(err);
+          return;
+        }
+      });
+    }
+  });
+
   res.header("Content-Type", "image/jpeg");
   avatar(id, size, sex).then(function(filename) {
     fs.readFile(filename, function (err,data) {
