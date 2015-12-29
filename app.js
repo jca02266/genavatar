@@ -4,39 +4,59 @@ var express = require('express');
 var fs = require('fs');
 var mkdirp = require('mkdirp');
 var path = require('path');
+var exec = require('child_process').exec;
 
 var app = express();
 
+// make directories
+var cacheDir = 'cache';
 var imageDir = 'image';
-mkdirp(imageDir, function (err) {
-  // path is already exists
+[cacheDir, imageDir].forEach(function(d) {
+  mkdirp(d, function (err) {
+    // path is already exists
+  });
 });
 
+var convert_cmd = 'convert';
 var avatarGenerator = require('avatar-generator')({
   order: 'background face clothes head hair eye mouth'.split(' '),
   images: path.join(__dirname, 'node_modules/avatar-generator/img'),
-  convert: 'convert'
+  convert: convert_cmd
 });
 
 var avatar = function (id, size, sex) {
   size = size || 80;
   sex = sex || 'male';
   return new Promise(function(resolve) {
-    var filename = path.join(imageDir, id + '-' + size + '.jpg');
+    var filename = path.join(imageDir, id + '.jpg');
+    var cachename = path.join(cacheDir, id + '-' + size + '.jpg');
 
-    if (fs.existsSync(filename)) {
-      resolve(filename);
-      return;
-    }
-
-    avatarGenerator(id, sex, size)
-    .write(filename, function (err) {
+    var callback = function (err) {
       if (err) {
         console.log(err);
         return;
       }
-      resolve(filename);
-    });
+      resolve(cachename);
+    };
+
+    if (fs.existsSync(cachename)) {
+      // use cached image file
+      resolve(cachename);
+      return;
+    }
+
+    if (fs.existsSync(filename)) {
+      // use the managed image file as source image
+      var command = [convert_cmd,
+                     "jpeg:" + filename,
+                     '-resize', size,
+                     cachename];
+      exec(command.join(' '), callback);
+      return;
+    }
+
+    // generate randomized image file
+    avatarGenerator(id, sex, size).write(cachename, callback);
   });
 }
 
