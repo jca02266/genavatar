@@ -5,6 +5,7 @@ var fs = require('fs');
 var mkdirp = require('mkdirp');
 var path = require('path');
 var exec = require('child_process').exec;
+var md5 = require('md5');
 
 var app = express();
 
@@ -25,9 +26,18 @@ var avatarGenerator = require('avatar-generator')({
 });
 
 var avatar = function (id, size, sex) {
-  size = size || 80;
-  sex = sex || 'male';
   return new Promise(function(resolve) {
+    // Sanitize
+    if (/[^0-9a-zA-Z.]/.test(id)) {
+      id = md5(id);
+    }
+    if (! /^\d{1,3}/.test(size)) {
+      size = 80;
+    }
+    if (sex !== 'male' && sex !== 'female') {
+      sex = 'male';
+    }
+
     var filename = path.join(imageDir, id + '.jpg');
     var cachename = path.join(cacheDir, id + '-' + size + '.jpg');
 
