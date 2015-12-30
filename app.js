@@ -21,7 +21,7 @@ var imageDir = 'image';
 var convert_cmd = 'convert';
 var avatarGenerator = require('avatar-generator')({
   order: 'background face clothes head hair eye mouth'.split(' '),
-  images: path.join(__dirname, 'node_modules/avatar-generator/img'),
+  images: 'montage/img',
   convert: convert_cmd
 });
 
