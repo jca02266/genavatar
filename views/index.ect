@@ -1,11 +1,11 @@
-<h1><%= title %></h1>
+<h1><%= @title %></h1>
 <p><a href="/form">New Entry</a></p>
 <ul>
-<% items.forEach(function(item){ %>
+<% for item in @items: %>
   <li><img src="avatar/<%= item.id %>?s=20" />
       <%= item.id %>
       &lt;<%= item.email %>&gt;
       (Created at: <%= item.created %>)
   </li>
-<% }) %>
+<% end %>
 </ul>

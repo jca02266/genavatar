@@ -8,12 +8,14 @@ var bodyParser = require('body-parser');
 var multer = require('multer');
 var model = require('./model');
 var md5 = require('md5');
-var Post = model.Post;
+var ECT = require('ect');
 
+var Post = model.Post;
 var app = express();
 
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.engine('ect', ECT({ watch: true, root: __dirname + '/views', ext: '.ect' }).render);
+app.set('view engine', 'ect');
 app.use(multer({ dest: './uploads/'}).single('image'));
 //app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

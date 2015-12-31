@@ -19,7 +19,7 @@
   "dependencies": {
     "avatar-generator": "^1.0.7",
     "body-parser": "^1.14.2",
-    "ejs": "^2.3.4",
+    "ect": "^0.5.9",
     "express": "^4.13.3",
     "md5": "^2.0.0",
     "mkdirp": "^0.5.1",
