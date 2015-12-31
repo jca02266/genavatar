@@ -101,11 +101,10 @@ app.post('/create', function(req, res) {
   var email = req.body.email;
 
   var id = md5(email);
-  var dstpath = null;
   if (req.file) {
     var file = req.file;
     var srcpath = file.path
-    dstpath = path.join(imageDir, id + '.jpg');
+    var dstpath = path.join(imageDir, id + '.jpg');
     console.log(file);
     console.log(srcpath);
     console.log(dstpath);
@@ -134,7 +133,7 @@ app.post('/create', function(req, res) {
   Post.find({email: email}, function(err, items) {
     if (items.length == 0) {
       // insert
-      var newPost = new Post({id: id, email: email, path: dstpath});
+      var newPost = new Post({id: id, email: email});
       newPost.save(function(err) {
         if (err) {
           console.log(err);
