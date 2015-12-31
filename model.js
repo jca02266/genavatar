@@ -11,4 +11,14 @@ var Post = new mongoose.Schema({
   , created: { type: Date, default: Date.now }
 });
 
-exports.Post = db.model('Post', Post);
+db.model('Post', Post);
+
+module.exports = db;
+
+db.connection.on('error', function (err) {
+  console.log('Connection Error: ' + db.connection.readyState);
+});
+
+db.connection.on('open', function (err) {
+  console.log('Connected to the MongoDB:' + db.connection.readyState);
+});

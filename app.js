@@ -6,14 +6,14 @@ var mkdirp = require('mkdirp');
 var path = require('path');
 var bodyParser = require('body-parser');
 var multer = require('multer');
-var model = require('./model');
 var md5 = require('md5');
 var ECT = require('ect');
 var exec = require('child_process').exec;
 var md5 = require('md5');
 var glob = require('glob');
 
-var Post = model.Post;
+var db = require('./model');
+var Post = db.model('Post');
 var app = express();
 
 app.set('views', path.join(__dirname, 'views'));
@@ -85,8 +85,13 @@ var avatar = function (id, size, sex) {
 }
 
 app.get('/', function(req, res) {
+  if (db.connection.readyState === 0) {
+    res.render('error', { title: 'Connection Error' });
+    return;
+  }
+
   Post.find({}, function(err, items) {
-    res.render('index', { title: 'Member list', items: items });
+    res.render('index', { title: 'Member List', items: items });
   });
 });
 app.get('/form', function(req, res) {
