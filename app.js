@@ -11,6 +11,7 @@ var md5 = require('md5');
 var ECT = require('ect');
 var exec = require('child_process').exec;
 var md5 = require('md5');
+var glob = require('glob');
 
 var Post = model.Post;
 var app = express();
@@ -109,6 +110,16 @@ app.post('/create', function(req, res) {
         res.redirect('back');
         return;
       }
+    });
+    // remove cache
+    glob(path.join("cache", id + "-*.jpg"), function(err, files) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      files.forEach(function(file) {
+        fs.unlinkSync(file);
+      });
     });
   }
 
