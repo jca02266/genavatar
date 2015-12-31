@@ -1,24 +1,51 @@
-var mongoose = require('mongoose');
-var db = mongoose.connect('mongodb://localhost/genavatar');
+var _ = require('lodash');
+var objs = {};
+var models = {};
+var db = {
+  connection: {
+    readyState: 1
+  },
+  model: function(name, obj) {
+    if (obj !== undefined) {
+      models[name] = obj
+    }
+    return models[name];
+  }
+};
 
-function md5validator(v) {
-  return v === null || v.length === 32;
+function Post(obj) {
+  this.id = obj.id;
+  this.email = obj.email;
+  this.path = obj.path;
+  this.created = new Date;
 }
 
-var Post = new mongoose.Schema({
-    id      : { type: String, validate: [md5validator, "Bad md5 digest string"] }
-  , email   : { type: String }
-  , created: { type: Date, default: Date.now }
-});
+Post.save = Post.prototype.save = function(callback) {
+  objs[this.email] = this;
+  if (callback) {
+    callback();
+  }
+};
+
+Post.find = Post.prototype.find = function(search, callback) {
+  var items = []
+  if (_.isEmpty(search)) {
+    _.forEach(objs, function(obj) {
+      items.push(obj)}
+    );
+    callback(undefined, items);
+    return;
+  }
+  _.forEach(objs, function(obj) {
+    _.forEach(search, function(val, key) {
+      if (obj[key] === val) {
+        items.push(obj);
+      }
+    });
+  });
+  callback(undefined, items);
+};
 
 db.model('Post', Post);
 
 module.exports = db;
-
-db.connection.on('error', function (err) {
-  console.log('Connection Error: ' + db.connection.readyState);
-});
-
-db.connection.on('open', function (err) {
-  console.log('Connected to the MongoDB:' + db.connection.readyState);
-});
