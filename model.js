@@ -52,6 +52,10 @@ Post.find = Post.prototype.find = function(search, callback) {
 db.model('Post', Post);
 
 fs.readdir('image', function(err, files) {
+  if (err) {
+    console.log(err);
+    return;
+  }
   files.forEach(function(file) {
     var m = /^(.*)\.jpg$/.exec(file);
     if (m) {
