@@ -72,5 +72,15 @@ describe('Test for model.js', function() {
       assert.equal(2,     objs[1].id);
       assert.equal('c@d', objs[1].email);
     });
+
+    Post.find({id: 2}, function(err, objs) {
+      assert.equal(1,     objs.length);
+      assert.equal(2,     objs[0].id);
+      assert.equal('c@d', objs[0].email);
+    });
+  });
+
+  it('connection status always should return 1', function() {
+    assert(1, db.connection.readyState);
   });
 });
