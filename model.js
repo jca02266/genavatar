@@ -21,7 +21,7 @@ function Post(obj) {
 }
 
 Post.save = Post.prototype.save = function(callback) {
-  objs[this.email] = this;
+  objs[this.id] = this;
   if (callback) {
     callback();
   }
