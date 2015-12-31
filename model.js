@@ -1,4 +1,7 @@
 var _ = require('lodash');
+var fs = require('fs');
+var path = require('path');
+
 var objs = {};
 var models = {};
 var db = {
@@ -17,7 +20,7 @@ function Post(obj) {
   this.id = obj.id;
   this.email = obj.email;
   this.path = obj.path;
-  this.created = new Date;
+  this.created = obj.created || new Date;
 }
 
 Post.save = Post.prototype.save = function(callback) {
@@ -47,5 +50,15 @@ Post.find = Post.prototype.find = function(search, callback) {
 };
 
 db.model('Post', Post);
+
+fs.readdir('image', function(err, files) {
+  files.forEach(function(file) {
+    var m = /^(.*)\.jpg$/.exec(file);
+    if (m) {
+      var stat = fs.statSync(path.join('image', file));
+      new Post({id: m[1], created: stat.mtime}).save();
+    }
+  });
+});
 
 module.exports = db;
