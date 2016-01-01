@@ -11,6 +11,7 @@ var ECT = require('ect');
 var glob = require('glob');
 
 var db = require('./model');
+//var db = require('./model-mongodb');
 var Post = db.model('Post');
 var app = express();
 
