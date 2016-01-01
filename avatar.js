@@ -3,6 +3,7 @@
 var fs = require('fs');
 var path = require('path');
 var exec = require('child_process').exec;
+var md5 = require('md5');
 
 var avatar = function(options) {
   var convertCommand = options.convertCommand || 'convert';

@@ -34,6 +34,21 @@ describe('avatar.js', function() {
       assert.ok(stat.size > 0, 'stat.size > 0');
     });
   });
+  it('generate new image with md5', function() {
+    var avatar = avatarGenerator({imageDir: imageDir, cacheDir: cacheDir});
+    var expectCachename = path.join('test-tmp', 'cacheDir', '9091f9e8d5f0f8796d06ee321fec4631-123.jpg');
+
+    // id has non alphanumeric value, change to md5
+    var promise = avatar('xxx-x', 123, 'male');
+    assert.equal('object', typeof promise);
+
+    assert.equal(false, fse.existsSync(expectCachename));
+    return promise.then(function(filename) {
+      assert.equal(expectCachename, filename);
+      var stat = fse.statSync(expectCachename);
+      assert.ok(stat.size > 0, 'stat.size > 0');
+    });
+  });
   it('reuse cached image', function() {
     var avatar = avatarGenerator({imageDir: imageDir, cacheDir: cacheDir});
     var expectCachename = path.join('test-tmp', 'cacheDir', 'xxx-123.jpg');
