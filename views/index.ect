@@ -1,12 +1,25 @@
 <% extend 'layout.ect' %>
 <h1><%= @title %></h1>
 <p><a href="/form">New Entry</a></p>
-<ul>
+
+<div class="container table-responsive">
+<table class="table table-hover">
+  <tr><th>image</th>
+      <th>id</th>
+      <th>mail address</th>
+      <th>created at</th>
+  </tr>
 <% for item in @items: %>
-  <li><img src="avatar/<%= item.id %>?s=30" />
-      <%= item.id %>
-      &lt;<%= item.email %>&gt;
-      (Created at: <%= item.created %>)
-  </li>
+  <tr>
+    <td>
+      <a href="/avatar/<%= item.id %>?s=100">
+        <img src="/avatar/<%= item.id %>?s=30" class="img-responsive img-circle" />
+      </a>
+    </td>
+    <td style="font-family:monospace;"><%= item.id %></td>
+    <td><%= item.email %></td>
+    <td><%= item.created %> <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></td>
+  </tr>
 <% end %>
-</ul>
+</table>
+</div>

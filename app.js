@@ -14,9 +14,18 @@ var db = require('./model');
 var Post = db.model('Post');
 var app = express();
 
+// static resources
+app.use('/jquery',
+  express.static(path.join(__dirname, 'node_modules/jquery/dist')));
+app.use('/bootstrap',
+  express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
+
+// view engine
 app.set('views', path.join(__dirname, 'views'));
 app.engine('ect', ECT({ watch: true, root: __dirname + '/views', ext: '.ect' }).render);
 app.set('view engine', 'ect');
+
+// body parser
 app.use(multer({ dest: './uploads/'}).single('image'));
 //app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
