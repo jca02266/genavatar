@@ -53,7 +53,7 @@ db.model('Post', Post);
 
 fs.readdir('image', function(err, files) {
   if (err) {
-    console.log(err);
+    // image directory does not exist
     return;
   }
   files.forEach(function(file) {
