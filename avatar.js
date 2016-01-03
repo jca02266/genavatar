@@ -15,6 +15,14 @@ var avatar = function(options) {
     convert: convertCommand
   });
 
+  var resizeImage = function(srcPath, destPath, size, callback) {
+    var command = [convertCommand,
+                   "jpeg:" + srcPath,
+                   '-resize', size,
+                   destPath];
+    exec(command.join(' '), callback);
+  };
+
   return function(id, size, sex) {
     return new Promise(function(resolve) {
       // Sanitize
@@ -47,16 +55,19 @@ var avatar = function(options) {
 
       if (fs.existsSync(filename)) {
         // use the managed image file as source image
-        var command = [convertCommand,
-                       "jpeg:" + filename,
-                       '-resize', size,
-                       cachename];
-        exec(command.join(' '), callback);
+        resizeImage(filename, cachename, size, callback);
         return;
       }
 
       // generate randomized image file
-      avatarGenerator(id, sex, size).write(cachename, callback);
+      var original_size = 400;
+      avatarGenerator(id, sex, original_size).write(filename, function(err) {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        resizeImage(filename, cachename, size, callback);
+      });
     });
   };
 };
