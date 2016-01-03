@@ -62,10 +62,10 @@ app.get('/form', function(req, res) {
   res.render('form', { title: 'New Member' });
 });
 app.post('/create', function(req, res) {
-  var email = req.body.email;
+  var name = req.body.name;
   var sex = req.body.sex;
 
-  var id = md5(email);
+  var id = md5(name);
   if (req.file) {
     var file = req.file;
     var srcpath = file.path
@@ -95,10 +95,10 @@ app.post('/create', function(req, res) {
   }
 
   // insert or update
-  Post.find({email: email}, function(err, items) {
+  Post.find({name: name}, function(err, items) {
     if (items.length == 0) {
       // insert
-      var newPost = new Post({id: id, email: email, sex: sex});
+      var newPost = new Post({id: id, name: name, sex: sex});
       newPost.save(function(err) {
         if (err) {
           console.log(err);

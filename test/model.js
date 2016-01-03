@@ -14,10 +14,10 @@ describe('Test for model.js', function() {
 
   it('find for empty db', function() {
     var Post = db.model('Post');
-    var post = new Post({id: 1, email: 'a@b'});
+    var post = new Post({id: 1, name: 'a@b'});
     assert.equal('object', typeof post);
     assert.equal(1,     post.id);
-    assert.equal('a@b', post.email);
+    assert.equal('a@b', post.name);
 
     Post.find({}, function(err, objs) {
       assert.equal(0, objs.length);
@@ -26,57 +26,57 @@ describe('Test for model.js', function() {
 
   it('find 1 entry', function() {
     var Post = db.model('Post');
-    new Post({id: 1, email: 'a@b'}).save();
+    new Post({id: 1, name: 'a@b'}).save();
 
     Post.find({}, function(err, objs) {
       assert.equal(1,     objs.length);
       assert.equal(1,     objs[0].id);
-      assert.equal('a@b', objs[0].email);
+      assert.equal('a@b', objs[0].name);
     });
   });
 
   it('entries is not found', function() {
     var Post = db.model('Post');
-    new Post({id: 1, email: 'a@b'}).save();
+    new Post({id: 1, name: 'a@b'}).save();
 
     Post.find({id: 2}, function(err, objs) {
       assert.equal(0, objs.length);
     });
   });
 
-  it('find 1 entry by email', function() {
+  it('find 1 entry by name', function() {
     var Post = db.model('Post');
-    new Post({id: 1, email: 'a@b'}).save();
+    new Post({id: 1, name: 'a@b'}).save();
     Post.find({id: 1}, function(err, objs) {
       assert.equal(1,     objs.length);
       assert.equal(1,     objs[0].id);
-      assert.equal('a@b', objs[0].email);
+      assert.equal('a@b', objs[0].name);
     });
 
-    Post.find({email: 'a@b'}, function(err, objs) {
+    Post.find({name: 'a@b'}, function(err, objs) {
       assert.equal(1,     objs.length);
       assert.equal(1,     objs[0].id);
-      assert.equal('a@b', objs[0].email);
+      assert.equal('a@b', objs[0].name);
     });
   });
 
   it('find 2 entries', function() {
     var Post = db.model('Post');
-    new Post({id: 1, email: 'a@b'}).save();
-    new Post({id: 2, email: 'c@d'}).save();
+    new Post({id: 1, name: 'a@b'}).save();
+    new Post({id: 2, name: 'c@d'}).save();
 
     Post.find({}, function(err, objs) {
       assert.equal(2,     objs.length);
       assert.equal(1,     objs[0].id);
-      assert.equal('a@b', objs[0].email);
+      assert.equal('a@b', objs[0].name);
       assert.equal(2,     objs[1].id);
-      assert.equal('c@d', objs[1].email);
+      assert.equal('c@d', objs[1].name);
     });
 
     Post.find({id: 2}, function(err, objs) {
       assert.equal(1,     objs.length);
       assert.equal(2,     objs[0].id);
-      assert.equal('c@d', objs[0].email);
+      assert.equal('c@d', objs[0].name);
     });
   });
 
