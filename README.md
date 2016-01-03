@@ -30,6 +30,12 @@ You can confirm like below.
 curl http://localhost:3000/avatar/someid?s=100 > sample.jpg
 ```
 
+Or,
+
+http://genavatar.herokuapp.com/avatar/someid?s=100
+
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
 ## License
 
 Licensed under [the MIT license][license].
