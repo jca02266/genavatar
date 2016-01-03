@@ -16,21 +16,21 @@ var db = {
   }
 };
 
-function Post(obj) {
+function Members(obj) {
   this.id = obj.id;
   this.name = obj.name;
   this.sex = obj.sex;
   this.created = obj.created || new Date;
 }
 
-Post.save = Post.prototype.save = function(callback) {
+Members.save = Members.prototype.save = function(callback) {
   objs[this.id] = this;
   if (callback) {
     callback();
   }
 };
 
-Post.find = Post.prototype.find = function(search, callback) {
+Members.find = Members.prototype.find = function(search, callback) {
   var items = []
   if (_.isEmpty(search)) {
     _.forEach(objs, function(obj) {
@@ -49,7 +49,7 @@ Post.find = Post.prototype.find = function(search, callback) {
   callback(undefined, items);
 };
 
-Post.remove = Post.prototype.remove = function(search, callback) {
+Members.remove = Members.prototype.remove = function(search, callback) {
   if (_.isEmpty(search)) {
     objs = {};
     callback(undefined);
@@ -70,7 +70,7 @@ Post.remove = Post.prototype.remove = function(search, callback) {
   callback(undefined, items);
 };
 
-db.model('Post', Post);
+db.model('Members', Members);
 
 fs.readdir('image', function(err, files) {
   if (err) {
@@ -81,7 +81,7 @@ fs.readdir('image', function(err, files) {
     var m = /^(.*)\.jpg$/.exec(file);
     if (m) {
       var stat = fs.statSync(path.join('image', file));
-      new Post({id: m[1], created: stat.mtime}).save();
+      new Members({id: m[1], created: stat.mtime}).save();
     }
   });
 });

@@ -12,7 +12,7 @@ var glob = require('glob');
 
 var db = require('./model');
 //var db = require('./model-mongodb');
-var Post = db.model('Post');
+var Members = db.model('Members');
 var app = express();
 
 // static resources
@@ -54,7 +54,7 @@ app.get('/', function(req, res) {
     return;
   }
 
-  Post.find({}, function(err, items) {
+  Members.find({}, function(err, items) {
     res.render('index', { title: 'Member List', items: items });
   });
 });
@@ -111,11 +111,11 @@ app.post('/create', function(req, res) {
   }
 
   // insert or update
-  Post.find({name: name}, function(err, items) {
+  Members.find({name: name}, function(err, items) {
     if (items.length == 0) {
       // insert
-      var newPost = new Post({id: id, name: name, sex: sex});
-      newPost.save(function(err) {
+      var member = new Members({id: id, name: name, sex: sex});
+      member.save(function(err) {
         if (err) {
           console.log(err);
           res.redirect('back');
@@ -133,11 +133,11 @@ app.get('/avatar/:id', function(req, res) {
   var size = req.query.s || req.query.size;
   var sex = req.query.x  || req.query.sex;
 
-  Post.find({id: id}, function(err, items) {
+  Members.find({id: id}, function(err, items) {
     if (items.length == 0) {
       // no entry
-      var newPost = new Post({id: id, sex: sex});
-      newPost.save(function(err) {
+      var member = new Members({id: id, sex: sex});
+      member.save(function(err) {
         if (err) {
           console.log(err);
           return;
@@ -159,7 +159,7 @@ app.get('/avatar/:id', function(req, res) {
 });
 app.get('/delete/:id', function(req, res) {
   var id = req.params.id;
-  Post.remove({id: id}, function() {
+  Members.remove({id: id}, function() {
     // remove cache
     removeCache(id, function(err) {
       if (err) {

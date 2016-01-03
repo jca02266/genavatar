@@ -9,14 +9,14 @@ function sexValidator(v) {
   return v === null || v === 'male' || v === 'female';
 }
 
-var Post = new mongoose.Schema({
+var Members = new mongoose.Schema({
     id      : { type: String, validate: [md5validator, "Bad md5 digest string"] }
   , name    : { type: String }
   , sex     : { type: String, validate: [sexValidator, "{VALUE} is neither male nor female"] }
   , created: { type: Date, default: Date.now }
 });
 
-db.model('Post', Post);
+db.model('Members', Members);
 
 module.exports = db;
 
