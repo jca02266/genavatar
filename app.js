@@ -63,6 +63,7 @@ app.get('/form', function(req, res) {
 });
 app.post('/create', function(req, res) {
   var email = req.body.email;
+  var sex = req.body.sex;
 
   var id = md5(email);
   if (req.file) {
@@ -97,7 +98,7 @@ app.post('/create', function(req, res) {
   Post.find({email: email}, function(err, items) {
     if (items.length == 0) {
       // insert
-      var newPost = new Post({id: id, email: email});
+      var newPost = new Post({id: id, email: email, sex: sex});
       newPost.save(function(err) {
         if (err) {
           console.log(err);
@@ -119,7 +120,7 @@ app.get('/avatar/:id', function(req, res) {
   Post.find({id: id}, function(err, items) {
     if (items.length == 0) {
       // no entry
-      var newPost = new Post({id: id});
+      var newPost = new Post({id: id, sex: sex});
       newPost.save(function(err) {
         if (err) {
           console.log(err);

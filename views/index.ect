@@ -10,10 +10,11 @@
       <th>created at</th>
   </tr>
 <% for item in @items: %>
+<%   sex = '&x=' + item.sex if item.sex %>
   <tr>
     <td>
-      <a href="/avatar/<%= item.id %>?s=100">
-        <img src="/avatar/<%= item.id %>?s=30" class="img-responsive img-circle" />
+      <a href="/avatar/<%= item.id %>?s=100<%= sex %>">
+        <img src="/avatar/<%= item.id %>?s=30<%= sex %>" class="img-responsive img-circle" />
       </a>
     </td>
     <td style="font-family:monospace;"><%= item.id %></td>

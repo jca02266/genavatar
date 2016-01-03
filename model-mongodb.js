@@ -5,9 +5,14 @@ function md5validator(v) {
   return v === null || v.length === 32;
 }
 
+function sexValidator(v) {
+  return v === null || v === 'male' || v === 'female';
+}
+
 var Post = new mongoose.Schema({
     id      : { type: String, validate: [md5validator, "Bad md5 digest string"] }
   , email   : { type: String }
+  , sex     : { type: String, validate: [sexValidator, "{VALUE} is neither male nor female"] }
   , created: { type: Date, default: Date.now }
 });
 

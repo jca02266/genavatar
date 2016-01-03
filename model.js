@@ -19,7 +19,7 @@ var db = {
 function Post(obj) {
   this.id = obj.id;
   this.email = obj.email;
-  this.path = obj.path;
+  this.sex = obj.sex;
   this.created = obj.created || new Date;
 }
 
