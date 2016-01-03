@@ -20,7 +20,12 @@
     </td>
     <td style="font-family:monospace;"><%= item.id %></td>
     <td><%= item.name %></td>
-    <td><%= created %> <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></td>
+    <td><%= created %>
+      <button type="button" class="close" aria-label="Close"
+        onClick="location.href='/delete/<%= item.id %>'" >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </td>
   </tr>
 <% end %>
 </table>

@@ -58,6 +58,26 @@ app.get('/', function(req, res) {
     res.render('index', { title: 'Member List', items: items });
   });
 });
+
+var removeFiles = function(dir, pattern) {
+  return function(id, callback) {
+    glob(path.join(dir, id + pattern), function(err, files) {
+      if (err) {
+        console.log(err);
+        callback(err);
+        return;
+      }
+      files.forEach(function(file) {
+        fs.unlinkSync(file);
+      });
+      callback();
+    });
+  };
+};
+
+var removeImage = removeFiles(imageDir, ".jpg");
+var removeCache = removeFiles(cacheDir, "*.jpg");
+
 app.get('/form', function(req, res) {
   res.render('form', { title: 'New Member' });
 });
@@ -82,15 +102,11 @@ app.post('/create', function(req, res) {
       }
     });
     // remove cache
-    glob(path.join("cache", id + "-*.jpg"), function(err, files) {
+    removeCache(id, function(err) {
       if (err) {
-        console.log(err);
         res.redirect('back');
         return;
       }
-      files.forEach(function(file) {
-        fs.unlinkSync(file);
-      });
     });
   }
 
@@ -138,6 +154,25 @@ app.get('/avatar/:id', function(req, res) {
         return;
       }
       res.send(data);
+    });
+  });
+});
+app.get('/delete/:id', function(req, res) {
+  var id = req.params.id;
+  Post.remove({id: id}, function() {
+    // remove cache
+    removeCache(id, function(err) {
+      if (err) {
+        res.redirect('back');
+        return;
+      }
+      removeImage(id, function(err) {
+        if (err) {
+          res.redirect('back');
+          return;
+        }
+        res.redirect('/');
+      });
     });
   });
 });

@@ -49,6 +49,27 @@ Post.find = Post.prototype.find = function(search, callback) {
   callback(undefined, items);
 };
 
+Post.remove = Post.prototype.remove = function(search, callback) {
+  if (_.isEmpty(search)) {
+    objs = {};
+    callback(undefined);
+    return;
+  }
+
+  var items = []
+  _.forEach(objs, function(obj) {
+    _.forEach(search, function(val, key) {
+      if (obj[key] === val) {
+        items.push(obj);
+      }
+    });
+  });
+  items.forEach(function(obj) {
+    delete objs[obj.id];
+  });
+  callback(undefined, items);
+};
+
 db.model('Post', Post);
 
 fs.readdir('image', function(err, files) {

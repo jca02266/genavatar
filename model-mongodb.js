@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
 var db = mongoose.connect('mongodb://localhost/genavatar');
 
-function md5validator(v) {
-  return v === null || v.length === 32;
+function md5validator(id) {
+  return id && !/[^0-9a-zA-Z.]/.test(id);
 }
 
 function sexValidator(v) {
