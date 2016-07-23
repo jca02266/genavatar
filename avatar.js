@@ -60,7 +60,7 @@ var avatar = function(options) {
       }
 
       var original_size = 400;
-      if (opt.default) {
+      if (opt && opt.default) {
         resizeImage(opt.default_image_filename, filename, original_size,
           function(err) {
             resizeImage(opt.default_image_filename, cachename, size, callback);
