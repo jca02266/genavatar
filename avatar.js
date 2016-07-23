@@ -23,7 +23,7 @@ var avatar = function(options) {
     exec(command.join(' '), callback);
   };
 
-  return function(id, size, sex) {
+  return function(id, size, sex, opt) {
     return new Promise(function(resolve) {
       // Sanitize
       if (/[^0-9a-zA-Z.]/.test(id)) {
@@ -59,8 +59,16 @@ var avatar = function(options) {
         return;
       }
 
-      // generate randomized image file
       var original_size = 400;
+      if (opt.default) {
+        resizeImage(opt.default_image_filename, filename, original_size,
+          function(err) {
+            resizeImage(opt.default_image_filename, cachename, size, callback);
+          });
+        return;
+      }
+
+      // generate randomized image file
       avatarGenerator(id, sex, original_size).write(filename, function(err) {
         if (err) {
           console.log(err);

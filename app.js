@@ -15,6 +15,7 @@ var db = require('./model');
 var Members = db.model('Members');
 var app = express();
 
+var default_image_filename = path.join(__dirname, 'default_image/mystery-man.png');
 // static resources
 app.use('/jquery',
   express.static(path.join(__dirname, 'node_modules/jquery/dist')));
@@ -132,6 +133,7 @@ app.get('/avatar/:id', function(req, res) {
   var id = req.params.id;
   var size = req.query.s || req.query.size;
   var sex = req.query.x  || req.query.sex;
+  var d = req.query.d  || req.query.default;
 
   Members.find({id: id}, function(err, items) {
     if (items.length == 0) {
@@ -146,8 +148,13 @@ app.get('/avatar/:id', function(req, res) {
     }
   });
 
+  var opt = {
+    "default_image_filename": default_image_filename,
+    "default": d
+  }
+
   res.header("Content-Type", "image/jpeg");
-  avatar(id, size, sex).then(function(filename) {
+  avatar(id, size, sex, opt).then(function(filename) {
     fs.readFile(filename, function (err,data) {
       if (err) {
         console.log(err);
