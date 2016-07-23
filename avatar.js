@@ -17,7 +17,7 @@ var avatar = function(options) {
 
   var resizeImage = function(srcPath, destPath, size, callback) {
     var command = [convertCommand,
-                   "jpeg:" + srcPath,
+                   srcPath,
                    '-resize', size,
                    destPath];
     exec(command.join(' '), callback);
