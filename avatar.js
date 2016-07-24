@@ -9,6 +9,13 @@ var avatar = function(options) {
   var convertCommand = options.convertCommand || 'convert';
   var imageDir = options.imageDir;
   var cacheDir = options.cacheDir;
+  var spy = options.spy || {
+    value: undefined,
+    cached:   () => {},
+    resize:   () => {},
+    default:  () => {},
+    generate: () => {}
+  };
   var avatarGenerator = require('avatar-generator')({
     order: options.order || 'background face clothes head hair eye mouth'.split(' '),
     images: options.images || 'montage/img',
@@ -50,12 +57,14 @@ var avatar = function(options) {
       if (fs.existsSync(cachename)) {
         // use cached image file
         resolve(cachename);
+        spy.cached();
         return;
       }
 
       if (fs.existsSync(filename)) {
         // use the managed image file as source image
         resizeImage(filename, cachename, size, callback);
+        spy.resize();
         return;
       }
 
@@ -65,6 +74,7 @@ var avatar = function(options) {
           function(err) {
             resizeImage(opt.default_image_filename, cachename, size, callback);
           });
+        spy.default();
         return;
       }
 
@@ -75,6 +85,7 @@ var avatar = function(options) {
           return;
         }
         resizeImage(filename, cachename, size, callback);
+        spy.generate();
       });
     });
   };
